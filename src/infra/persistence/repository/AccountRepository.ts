@@ -10,7 +10,7 @@ enum ETable {
 export class AccountRepository implements IAccountRepository {
     constructor (private dataBase: DataBase = DataBase.init(ETable.TABLE)) {}
 
-    create(account: Omit<IAccount, 'id'>): IAccount {
+    create(account: IAccount): IAccount {
         return this.dataBase.createData(
             ETable.TABLE,
             account

@@ -1,5 +1,3 @@
-let autoId = 0
-
 export class DataBase {
     private static dataBase: DataBase
     private data: Map<string, Map<string, any>>
@@ -38,9 +36,7 @@ export class DataBase {
     }
 
     public createData(table: string, data: any): any {
-        autoId++
-        const newId = autoId.toString()
-
+        const newId = data.id.toString()
         const newData = (new Map<string, any>()).set(newId, data)
 
         this.data.set(table, newData)
@@ -55,8 +51,8 @@ export class DataBase {
         const foundData = this.data.get(table)?.get(id)
         if(!foundData) throw Error('Data not exist')
         
-        const updatedData = this.data.get(table)?.set(id, data)
+        this.data.get(table)?.set(id, data)
 
-        return updatedData
+        return this.getData(table, id)
     }
 }
