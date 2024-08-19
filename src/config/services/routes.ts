@@ -6,6 +6,7 @@ export class Router {
         const router = ExpressRouter()
 
         Routes.balanceRoutes(router)
+        Routes.eventRoutes(router)
 
         app.use(router)
     }

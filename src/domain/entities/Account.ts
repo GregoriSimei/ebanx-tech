@@ -21,12 +21,10 @@ export class Account implements IAccount {
     events: IEvent[]
     id: number
 
-    constructor(
-        id: number
-    ) {
+    constructor({ id = 0, events = [], amount = 0 }: Partial<IAccount>) {
         this.id = id
-        this.events = []
-        this.amount = 0
+        this.events = events
+        this.amount = amount
     }
 
     validate() {

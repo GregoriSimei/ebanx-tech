@@ -7,3 +7,10 @@ export function ok(data: any): HttpResponse {
         statusCode: EHttpStatusCode.OK
     }
 }
+
+export function created(data: any): HttpResponse {
+    return {
+        body: data,
+        statusCode: EHttpStatusCode.CREATED
+    }
+}

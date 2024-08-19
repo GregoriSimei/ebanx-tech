@@ -11,11 +11,11 @@ export const EventInvalidEventError = Error(EEventErr.INVALID_EVENT)
 export class Event implements IEvent {
     amount: number;
     destination?: number | undefined;
-    id: number;
+    id: string;
     origin?: number | undefined;
     type: EEventType;
 
-    constructor(id: number, type: EEventType, amount: number) {
+    constructor(id: string, type: EEventType, amount: number) {
         this.amount = amount
         this.id = id
         this.type = type

@@ -5,7 +5,7 @@ export enum EEventType {
 }
 
 export interface IEvent {
-    id: number
+    id: string
     type: EEventType
     amount: number
     origin?: number

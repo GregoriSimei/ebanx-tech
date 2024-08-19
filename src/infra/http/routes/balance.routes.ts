@@ -6,5 +6,5 @@ import { RouterAdapter } from "../adapters/RouterAdapter";
 export function balanceRoute(route: Router) {
     const getBalanceController: Controller = new GetBalanceController() 
 
-    route.use('/balance', RouterAdapter.adapt(getBalanceController))
+    route.get('/balance', RouterAdapter.adapt(getBalanceController).bind(getBalanceController))
 }
