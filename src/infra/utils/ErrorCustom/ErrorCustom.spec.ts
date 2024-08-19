@@ -26,4 +26,26 @@ describe('ErrorCustom', () => {
 
         expect(throwSomeError).toBeTruthy()
     })
+
+    test('when throw some error of the type Error and the error dont have stack should return the fileName and functionName as "unknown"', () => {
+        let throwSomeError: boolean = false
+
+        try {
+            testToThrowError()
+        } catch (e) {
+            throwSomeError = true
+            if (e instanceof Error) {
+                e.stack = undefined // empty stack error 
+                const errorHandled = new ErrorCustom({ error: e })
+
+                const fileName = errorHandled.getFileName()
+                const functionName = errorHandled.getFunctionName()
+
+                expect(fileName).toBe('unknown')
+                expect(functionName).toBe('unknown')
+            }
+        }
+
+        expect(throwSomeError).toBeTruthy()
+    })
 })
