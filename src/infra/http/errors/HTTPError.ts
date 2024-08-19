@@ -1,4 +1,3 @@
-import { ErrorCustom } from "infra/utils/ErrorCustom/ErrorCustom";
 import { EHttpStatusCode } from "../protocols/EHttpStatusCode";
 
 export class HttpError extends Error {

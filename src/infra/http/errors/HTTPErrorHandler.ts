@@ -1,7 +1,7 @@
 import { NextFunction, Response, Request } from 'express'
 import { HttpError } from './HTTPError'
-import { Logger } from 'infra/logger/logger'
-import { ErrorCustom } from 'infra/utils/ErrorCustom/ErrorCustom'
+import { Logger } from '../../../infra/logger/logger'
+import { ErrorCustom } from '../../../infra/utils/ErrorCustom/ErrorCustom'
 import { EHttpStatusCode } from '../protocols/EHttpStatusCode'
 
 type TLog = {
@@ -27,7 +27,7 @@ export class HTTPErrorHandler {
             aditionalInfo: log
         })
 
-        res.status(statusCode).json({ message: respMessage })
+        res.status(statusCode).json(respMessage)
         next()
     }
 }

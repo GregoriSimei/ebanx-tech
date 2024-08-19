@@ -1,4 +1,4 @@
-import { IAccount } from "domain/entities/IAccount";
+import { IAccount } from "../../domain/entities/IAccount";
 
 export interface IAccountRepository {
     create(account: Omit<IAccount, 'id'>): IAccount
