@@ -24,7 +24,7 @@ export class HTTPErrorHandler {
         let log: TLog = createHttpErrorLog(err, statusCode)
         Logger.error({
             message: respMessage,
-            aditionalInfo: log
+            additionalInfo: log
         })
 
         res.status(statusCode).json(respMessage)

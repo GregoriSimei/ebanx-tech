@@ -26,22 +26,27 @@ export class CreateEventUseCase implements ICreateEventUseCase {
             const { type } = request
             const availableEvent = availablesEvents[type]
 
-            if (!availableEvent) throw Error('invalid event')
+            if (!availableEvent) {
+                Logger.error({
+                    message: 'invalid event type',
+                    additionalInfo: request
+                })
+                throw Error('invalid event')
+            }
             
             return await availableEvent(request)
-        } catch (e) {
-            console.log(e)
+        } catch {
             throw new NotFound((0).toString())
         }
     }
 
-    async depositEvent(request: TCreateEventUseCaseRequest): Promise<TCreateEventUseCaseResponse> {
+    private async depositEvent(request: TCreateEventUseCaseRequest): Promise<TCreateEventUseCaseResponse> {
         const { destination, amount } = request
 
         if (!destination) {
             Logger.error({
                 message: 'request need a destination',
-                aditionalInfo: request
+                additionalInfo: request
             })
             throw new NotFound('invalid destination')
         }
@@ -64,11 +69,11 @@ export class CreateEventUseCase implements ICreateEventUseCase {
         }
     }
 
-    async transferEvent(request: TCreateEventUseCaseRequest): Promise<TCreateEventUseCaseResponse> {
+    private async transferEvent(request: TCreateEventUseCaseRequest): Promise<TCreateEventUseCaseResponse> {
         throw Error()
     }
 
-    async withdrawEvent(request: TCreateEventUseCaseRequest): Promise<TCreateEventUseCaseResponse> {
+    private async withdrawEvent(request: TCreateEventUseCaseRequest): Promise<TCreateEventUseCaseResponse> {
         throw Error()
     }
 }

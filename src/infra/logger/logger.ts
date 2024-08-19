@@ -10,7 +10,7 @@ const logger = winston.createLogger({
 
 type TLoggerLog = {
     message: string
-    aditionalInfo?: any
+    additionalInfo?: any
 }
 
 enum EAvailableType {
@@ -20,8 +20,8 @@ enum EAvailableType {
 }
 
 function logMessage(availableType: EAvailableType, request: TLoggerLog) {
-    const { message, aditionalInfo } = request
-    logger[availableType](message, { aditionalInfo })
+    const { message, additionalInfo } = request
+    logger[availableType](message, { additionalInfo })
 }
 
 export class Logger {
