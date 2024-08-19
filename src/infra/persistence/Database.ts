@@ -33,9 +33,8 @@ export class DataBase {
         if(!foundTable) throw Error('Table not exist')
 
         const foundData = this.data.get(table)?.get(id)
-        if(!foundData) throw Error('Data not exist')
         
-        return foundData
+        return foundData || null
     }
 
     public createData(table: string, data: any): any {

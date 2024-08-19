@@ -1,5 +1,5 @@
-import { IAccount } from "domain/entities/IAccount";
-import { IAccountRepository } from "domain/repositories/IAccountRepository";
+import { IAccount } from "../../../domain/entities/IAccount";
+import { IAccountRepository } from "../../../domain/repositories/IAccountRepository";
 import { DataBase } from "../Database";
 
 enum ETable {
