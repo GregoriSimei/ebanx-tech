@@ -51,15 +51,10 @@ export class CreateEventUseCase implements ICreateEventUseCase {
             throw new NotFound('invalid destination')
         }
 
-        const event: Event = new Event(randomUUID().toString(), EEventType.DEPOSIT, amount)
-        const accountFound = this.accountRepository.find(destination)
-        const account: Account = accountFound ? new Account({ ...accountFound }) : new Account({ id: destination })
-        account.addEvent(event)
-        account.validate()
+        let account: Account = this.createAccountIfNotExist(destination)
+        account = this.createAndValidateEvent(account, EEventType.DEPOSIT, amount)
     
-        const accountUpdated = accountFound ?
-            this.accountRepository.save(account) :
-            this.accountRepository.create(account)
+        const accountUpdated = this.accountRepository.save(account)
         
         return {
             destination: {
@@ -80,35 +75,13 @@ export class CreateEventUseCase implements ICreateEventUseCase {
             throw new NotFound('invalid origin and destination')
         }
 
-        const accountOriginFound = this.accountRepository.find(origin)
-        if (!accountOriginFound) {
-            Logger.error({
-                message: 'account not found on db',
-                additionalInfo: request
-            })
-            throw new NotFound('account not found')
-        }
-        
-        const accountDestinationFound = this.accountRepository.find(destination)
-        if (!accountDestinationFound) {
-            Logger.error({
-                message: 'account not found on db',
-                additionalInfo: request
-            })
-            throw new NotFound('account not found')
-        }
-
         const eventId = randomUUID().toString()
 
-        const accountOrigin: Account = new Account({ ...accountOriginFound })
-        const originEvent: Event = new Event(eventId, EEventType.TRANSFER, amount)
-        accountOrigin.addEvent(originEvent)
-        accountOrigin.validate()
+        let accountOrigin: Account = this.getAccount(origin)
+        accountOrigin = this.createAndValidateEvent(accountOrigin, EEventType.TRANSFER, amount, origin, destination)
 
-        const accountDestination: Account = new Account({ ...accountDestinationFound })
-        const destinationEvent: Event = new Event(eventId, EEventType.TRANSFER, amount)
-        accountDestination.addEvent(destinationEvent)
-        accountDestination.validate()
+        let accountDestination: Account = this.createAccountIfNotExist(destination)
+        accountDestination = this.createAndValidateEvent(accountDestination, EEventType.DEPOSIT, amount, origin, destination)
 
         const originUpdated = this.accountRepository.save(accountOrigin)
         const destinationUpdated = this.accountRepository.save(accountDestination)
@@ -136,19 +109,8 @@ export class CreateEventUseCase implements ICreateEventUseCase {
             throw new NotFound('invalid origin')
         }
 
-        const accountFound = this.accountRepository.find(origin)
-        if (!accountFound) {
-            Logger.error({
-                message: 'account not found on db',
-                additionalInfo: request
-            })
-            throw new NotFound('account not found')
-        }
-
-        const account = new Account({ ...accountFound })
-        const event: Event = new Event(randomUUID().toString(), EEventType.WITHDRAW, amount)
-        account.addEvent(event)
-        account.validate()
+        let account: Account = this.getAccount(origin)
+        account = this.createAndValidateEvent(account, EEventType.WITHDRAW, amount)
 
         const updatedAccount = this.accountRepository.save(account)
 
@@ -158,5 +120,35 @@ export class CreateEventUseCase implements ICreateEventUseCase {
                 id: updatedAccount.id.toString()
             }
         }
+    }
+
+    private getAccount(id: number): Account {
+        const accountFound = this.accountRepository.find(id)
+        if (!accountFound) {
+            Logger.error({
+                message: 'account not found',
+                additionalInfo: { id }
+            })
+            throw new NotFound('account not found')
+        }
+        const account = new Account({ ...accountFound })
+
+        return account
+    }
+
+    private createAccountIfNotExist(id: number): Account {
+        const accountFound = this.accountRepository.find(id)
+        const account: Account = accountFound ? 
+            new Account({ ...accountFound }) : 
+            new Account({ id })
+        return account
+    }
+
+    private createAndValidateEvent(account: Account, type: EEventType, amount: number, origin?: number, destination?: number): Account {
+        const eventId = randomUUID().toString()
+        const originEvent: Event = new Event({id: eventId, type, amount, origin, destination})
+        account.addEvent(originEvent)
+        account.validate()
+        return account
     }
 }

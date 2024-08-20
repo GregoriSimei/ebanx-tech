@@ -35,21 +35,9 @@ export class DataBase {
         return foundData || null
     }
 
-    public createData(table: string, data: any): any {
-        const newId = data.id.toString()
-        const newData = (new Map<string, any>()).set(newId, data)
-
-        this.data.set(table, newData)
-
-        return this.getData(table, newId)
-    }
-
     public saveData(table: string, id: string, data: any): any {
         const foundTable = this.data.has(table)
         if(!foundTable) throw Error('Table not exist')
-
-        const foundData = this.data.get(table)?.get(id)
-        if(!foundData) throw Error('Data not exist')
         
         this.data.get(table)?.set(id, data)
 

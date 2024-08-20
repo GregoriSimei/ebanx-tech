@@ -15,10 +15,12 @@ export class Event implements IEvent {
     origin?: number | undefined;
     type: EEventType;
 
-    constructor(id: string, type: EEventType, amount: number) {
+    constructor({id, type, amount, destination, origin}: IEvent) {
         this.amount = amount
         this.id = id
         this.type = type
+        this.destination = destination
+        this.origin = origin
     }
 
     valid() {
