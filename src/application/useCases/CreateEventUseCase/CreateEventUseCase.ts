@@ -70,7 +70,59 @@ export class CreateEventUseCase implements ICreateEventUseCase {
     }
 
     private async transferEvent(request: TCreateEventUseCaseRequest): Promise<TCreateEventUseCaseResponse> {
-        throw Error()
+        const { origin, destination, amount } = request
+
+        if (!origin || !destination) {
+            Logger.error({
+                message: 'request need a origin and destination',
+                additionalInfo: request
+            })
+            throw new NotFound('invalid origin and destination')
+        }
+
+        const accountOriginFound = this.accountRepository.find(origin)
+        if (!accountOriginFound) {
+            Logger.error({
+                message: 'account not found on db',
+                additionalInfo: request
+            })
+            throw new NotFound('account not found')
+        }
+        
+        const accountDestinationFound = this.accountRepository.find(destination)
+        if (!accountDestinationFound) {
+            Logger.error({
+                message: 'account not found on db',
+                additionalInfo: request
+            })
+            throw new NotFound('account not found')
+        }
+
+        const eventId = randomUUID().toString()
+
+        const accountOrigin: Account = new Account({ ...accountOriginFound })
+        const originEvent: Event = new Event(eventId, EEventType.TRANSFER, amount)
+        accountOrigin.addEvent(originEvent)
+        accountOrigin.validate()
+
+        const accountDestination: Account = new Account({ ...accountDestinationFound })
+        const destinationEvent: Event = new Event(eventId, EEventType.TRANSFER, amount)
+        accountDestination.addEvent(destinationEvent)
+        accountDestination.validate()
+
+        const originUpdated = this.accountRepository.save(accountOrigin)
+        const destinationUpdated = this.accountRepository.save(accountDestination)
+
+        return {
+            destination: {
+                balance: destinationUpdated.amount,
+                id: destinationUpdated.id.toString()
+            },
+            origin: {
+                balance: originUpdated.amount,
+                id: originUpdated.id.toString()
+            }
+        }
     }
 
     private async withdrawEvent(request: TCreateEventUseCaseRequest): Promise<TCreateEventUseCaseResponse> {
