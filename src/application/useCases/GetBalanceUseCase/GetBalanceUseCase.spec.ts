@@ -15,7 +15,6 @@ describe('GetBalanceUseCase', () => {
     })
 
     afterEach(() => {
-        vi.resetAllMocks()
         vi.restoreAllMocks()
     })
 
