@@ -43,4 +43,9 @@ export class DataBase {
 
         return this.getData(table, id)
     }
+
+    public reset(table: string): void {
+        const emptyTable = new Map<string, any>()
+        this.data.set(table, emptyTable)
+    }
 }

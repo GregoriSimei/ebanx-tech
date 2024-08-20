@@ -7,6 +7,7 @@ export class Router {
 
         Routes.balanceRoutes(router)
         Routes.eventRoutes(router)
+        Routes.resetRoutes(router)
 
         app.use(router)
     }

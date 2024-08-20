@@ -8,6 +8,12 @@ export function ok(data: any): HttpResponse {
     }
 }
 
+export function okNoData(): HttpResponse {
+    return {
+        statusCode: EHttpStatusCode.OK
+    }
+}
+
 export function created(data: any): HttpResponse {
     return {
         body: data,
