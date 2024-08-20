@@ -74,6 +74,37 @@ export class CreateEventUseCase implements ICreateEventUseCase {
     }
 
     private async withdrawEvent(request: TCreateEventUseCaseRequest): Promise<TCreateEventUseCaseResponse> {
-        throw Error()
+        const { origin, amount } = request
+
+        if (!origin) {
+            Logger.error({
+                message: 'request need a origin',
+                additionalInfo: request
+            })
+            throw new NotFound('invalid origin')
+        }
+
+        const accountFound = this.accountRepository.find(origin)
+        if (!accountFound) {
+            Logger.error({
+                message: 'account not found on db',
+                additionalInfo: request
+            })
+            throw new NotFound('account not found')
+        }
+
+        const account = new Account({ ...accountFound })
+        const event: Event = new Event(randomUUID().toString(), EEventType.WITHDRAW, amount)
+        account.addEvent(event)
+        account.validate()
+
+        const updatedAccount = this.accountRepository.save(account)
+
+        return {
+            origin: {
+                balance: updatedAccount.amount,
+                id: updatedAccount.id.toString()
+            }
+        }
     }
 }

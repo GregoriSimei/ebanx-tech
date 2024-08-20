@@ -12,7 +12,7 @@ export type TCreateEventUseCaseResponse = {
         id: string,
         balance: number
     }
-    destination: {
+    destination?: {
         id: string,
         balance: number
     }

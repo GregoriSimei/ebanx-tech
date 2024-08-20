@@ -3,7 +3,7 @@ import { IGetBalanceUseCase } from "./IGetBalanceUseCase";
 import { TGetBalanceUseCaseRequest } from "./TGetBalanceUseCase";
 import { AccountRepository } from "../../../infra/persistence/repository/AccountRepository";
 import { NotFound } from "../../../infra/http/errors/NotFound";
-import { Logger } from "infra/logger/logger";
+import { Logger } from "../../../infra/logger/logger";
 
 export class GetBalanceUseCase implements IGetBalanceUseCase {
 
