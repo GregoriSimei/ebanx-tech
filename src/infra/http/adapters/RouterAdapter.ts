@@ -16,8 +16,11 @@ export class RouterAdapter {
       try {
           const httpResponse = await controller.handle(httpRequest)
       
-          res.status(httpResponse.statusCode).json(httpResponse.body)
+          const responseType = httpResponse.type ?? 'json'
 
+          if (responseType == "json") res.status(httpResponse.statusCode).json(httpResponse.body)
+          else res.status(httpResponse.statusCode).send(httpResponse.body)
+          
           next()
       } catch (e) {
         HTTPErrorHandler.handle(e, req, res, next)

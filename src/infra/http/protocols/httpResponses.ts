@@ -1,16 +1,21 @@
 import { EHttpStatusCode } from "./EHttpStatusCode";
 import { HttpResponse } from "./http";
 
-export function ok(data: any): HttpResponse {
+type ResponseTypes = 'json' | 'message'
+
+export function ok(data: any, type: ResponseTypes = 'json'): HttpResponse {
     return {
         body: data,
-        statusCode: EHttpStatusCode.OK
+        statusCode: EHttpStatusCode.OK,
+        type
     }
 }
 
 export function okNoData(): HttpResponse {
     return {
-        statusCode: EHttpStatusCode.OK
+        statusCode: EHttpStatusCode.OK,
+        body: 'OK',
+        type: 'message'
     }
 }
 

@@ -3,6 +3,7 @@ export interface HttpResponse {
   statusCode: number
   body?: any
   headers?: any
+  type?: 'json' | 'message'
 }
 
 export interface HttpRequest {
