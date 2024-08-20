@@ -27,7 +27,7 @@ export class HTTPErrorHandler {
             additionalInfo: log
         })
 
-        res.status(statusCode).json(respMessage)
+        res.status(statusCode).send(respMessage)
         next()
     }
 }
