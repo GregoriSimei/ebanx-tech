@@ -75,8 +75,6 @@ export class CreateEventUseCase implements ICreateEventUseCase {
             throw new NotFound('invalid origin and destination')
         }
 
-        const eventId = randomUUID().toString()
-
         let accountOrigin: Account = this.getAccount(origin)
         accountOrigin = this.createAndValidateEvent(accountOrigin, EEventType.TRANSFER, amount, origin, destination)
 
